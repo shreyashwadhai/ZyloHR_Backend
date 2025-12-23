@@ -19,27 +19,27 @@ const session = require("express-session");
 const connectRedis = require("connect-redis");
 const RedisStore = connectRedis(session);
 
-const client = require("./config/redisClient");
+// const client = require("./config/redisClient");
 
 const app = express();
 const server = http.createServer(app);
 
 // Redis session
-app.use(
-  session({
-    store: new RedisStore({
-      client,
-    }),
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: false,   // true if using https
-      httpOnly: true,
-      maxAge: 1000 * 60 * 10, // 10 minutes
-    },
-  })
-);
+// app.use(
+//   session({
+//     store: new RedisStore({
+//       client,
+//     }),
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: false,   // true if using https
+//       httpOnly: true,
+//       maxAge: 1000 * 60 * 10, // 10 minutes
+//     },
+//   })
+// );
 
 // Socket.IO
 const io = socketIo(server, {
@@ -154,7 +154,7 @@ const apiRouter = require("./routers/api.router");
 app.use("/auth", authRouter);
 app.use("/api", apiRouter);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5000;
 
 //  Server Start
 app.listen(PORT, '0.0.0.0', () => {
