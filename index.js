@@ -157,7 +157,7 @@ app.use("/api", apiRouter);
 const PORT = process.env.PORT || 5000;
 
 //  Server Start
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   connectDB();
   console.log(`🚀 Server is ruuning up ! PORT : ${PORT}`);
 });
