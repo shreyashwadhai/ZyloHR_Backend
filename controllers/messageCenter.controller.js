@@ -1,8 +1,8 @@
-import Message from '../models/message.model.js'
-import User from '../models/user.model.js'
+const Message = require('../models/message.model.js');
+const User = require('../models/user.model.js');
 
 
-export const getMessages = async (req, res) => {
+const getMessages = async (req, res) => {
     try {
         const userId = req.user._id;
         const { conversationWith } = req.query;
@@ -32,7 +32,7 @@ export const getMessages = async (req, res) => {
     }
 };
 
-export const sendMessage = async (req, res) => {
+const sendMessage = async (req, res) => {
     try {
         const { receiverId, content } = req.body
         const senderId = req.user._id
@@ -55,7 +55,7 @@ export const sendMessage = async (req, res) => {
             senderName: sender.name,
             receiverName: receiver.name,
             content
-          });
+        });
 
         const savedMessage = await message.save()
         const populatedMessage = await Message.findById(savedMessage._id)
@@ -77,7 +77,7 @@ export const sendMessage = async (req, res) => {
     }
 }
 
-export const getConversation = async (req, res) => {
+const getConversation = async (req, res) => {
     try {
         const userId = req.user._id
         const otherUserId = req.params.userId
@@ -98,7 +98,7 @@ export const getConversation = async (req, res) => {
     }
 }
 
-export const markAsRead = async (req, res) => {
+const markAsRead = async (req, res) => {
     try {
         const userId = req.user._id
         const senderId = req.params.senderId
@@ -120,17 +120,25 @@ export const markAsRead = async (req, res) => {
     }
 }
 
-export const getUnreadCount = async (req, res) => {
+const getUnreadCount = async (req, res) => {
     try {
-      const userId = req.user._id;
-      
-      const unreadCount = await Message.countDocuments({
-        receiver: userId,
-        read: false
-      });
-  
-      res.status(200).json({ unreadCount });
+        const userId = req.user._id;
+
+        const unreadCount = await Message.countDocuments({
+            receiver: userId,
+            read: false
+        });
+
+        res.status(200).json({ unreadCount });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  };
+};
+
+module.exports = {
+    getMessages,
+    sendMessage,
+    getConversation,
+    markAsRead,
+    getUnreadCount
+};
