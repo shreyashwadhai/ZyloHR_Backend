@@ -2,6 +2,10 @@
 export HOME=/home/ubuntu
 cd /home/ubuntu/app
 
+# Stop any existing PM2 processes to avoid port conflicts
+pm2 stop all 2>/dev/null || true
+pm2 delete all 2>/dev/null || true
+
 # Create .env from CodePipeline variables
 cat > .env << EOF
 PORT=${PORT}
@@ -16,5 +20,16 @@ REDIS_URL=${REDIS_URL}
 SESSION_SECRET=${SESSION_SECRET}
 EOF
 
+# Verify .env was created
+echo "✅ .env file created:"
+cat .env
+
 # Start PM2
-pm2 start ecosystem.config.js || pm2 start index.js --name ZyloHR_Backend || pm2 restart ZyloHR_Backend
+if [ -f ecosystem.config.js ]; then
+  pm2 start ecosystem.config.js
+else
+  pm2 start index.js --name ZyloHR-Backend
+fi
+
+# Save PM2 configuration
+pm2 save
