@@ -3,11 +3,28 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/app
-
 hooks:
   ApplicationStop:
     - location: scripts/stop.sh
+      timeout: 300
+      runas: ubuntu
   AfterInstall:
     - location: scripts/install.sh
+      timeout: 300
+      runas: ubuntu
   ApplicationStart:
     - location: scripts/start.sh
+      timeout: 300
+      runas: ubuntu
+      # IMPORTANT: This passes environment variables to the script
+      environment:
+        PORT: "#{PORT}"
+        MONGO_URL: "#{MONGO_URL}"
+        JWT_SECRET: "#{JWT_SECRET}"
+        CLOUD_NAME: "#{CLOUD_NAME}"
+        CLOUD_API_KEY: "#{CLOUD_API_KEY}"
+        CLOUD_API_SECRET: "#{CLOUD_API_SECRET}"
+        ADMIN_SECRET_KEY: "#{ADMIN_SECRET_KEY}"
+        MANAGER_SECRET_KEY: "#{MANAGER_SECRET_KEY}"
+        REDIS_URL: "#{REDIS_URL}"
+        SESSION_SECRET: "#{SESSION_SECRET}"
